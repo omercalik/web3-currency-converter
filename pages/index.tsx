@@ -8,7 +8,7 @@ import { injected } from "../wallet/connector"
 import CustomModal from "../components/CustomModal"
 
 const Container = styled.div`
-  max-width: 1260px;
+  max-width: 300px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -25,9 +25,9 @@ const Header = styled.h1`
   margin-bottom: 5%;
 `
 
-const ConnectButton = styled.button`
-  background-color: white;
-  color: rgba(236, 54, 110, 1);
+export const ConnectButton = styled.button`
+  color: white;
+  background-color: rgba(236, 54, 110, 1);
   border: none;
   padding: 15px;
   font-size: 20px;
@@ -35,10 +35,9 @@ const ConnectButton = styled.button`
   cursor: pointer;
   transition: all 0.4s;
   margin-bottom: 15px;
-  width: 300px;
-
+  width: 100%;
   &:hover {
-    background-color: rgba(236, 54, 110, 1);
+    background-color: rgba(245, 177, 97, 1);
     color: white;
   }
 `
@@ -55,21 +54,11 @@ const Span = styled.span`
 `
 
 const Home: NextPage = () => {
-  const [isConnected, setIsConnected] = useState(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const { active, account, connector, activate, deactivate } = useWeb3React()
+  const { active, activate } = useWeb3React()
   const connectToWallet = async () => {
     try {
       await activate(injected)
-      setIsConnected(true)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const disconnectFromWallet = async () => {
-    try {
-      deactivate()
     } catch (err) {
       console.log(err)
     }
@@ -89,9 +78,11 @@ const Home: NextPage = () => {
       <Header>NEPTUNE MUTUAL CURRENCY CONVERTER</Header>
       <Container>
         <Form />
-        <ConnectButton onClick={connectToWallet}>
-          Connect to Wallet
-        </ConnectButton>
+        {!active && (
+          <ConnectButton onClick={connectToWallet}>
+            Connect to Wallet
+          </ConnectButton>
+        )}
 
         {active ? (
           <Span onClick={openModal}>Check wallet details</Span>

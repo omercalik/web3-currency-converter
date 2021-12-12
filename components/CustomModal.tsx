@@ -3,6 +3,7 @@ import styled from "styled-components"
 import Modal from "react-modal"
 import { useWeb3React } from "@web3-react/core"
 import Web3 from "web3"
+import { ConnectButton } from "../pages"
 
 type Props = {
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -31,6 +32,7 @@ const DetailRow = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid gray;
+  margin-bottom: 15px;
 `
 
 const DetailText = styled.p`
@@ -43,6 +45,19 @@ const CustomModal = ({ setIsModalOpen, isModalOpen }: Props) => {
 
   const closeModal = () => {
     setIsModalOpen(false)
+  }
+
+  const disconnectFromWallet = async () => {
+    try {
+      deactivate()
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleClick = () => {
+    disconnectFromWallet()
+    closeModal()
   }
 
   return (
@@ -61,6 +76,8 @@ const CustomModal = ({ setIsModalOpen, isModalOpen }: Props) => {
           <DetailText>Chain ID</DetailText>
           <DetailText>{chainId}</DetailText>
         </DetailRow>
+
+        <ConnectButton onClick={handleClick}>Disconnect</ConnectButton>
       </ModalContentContainer>
     </Modal>
   )
